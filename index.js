@@ -28,46 +28,43 @@ function searchInputTypeHandler(event) {
 };
 
 const initialAppointments = [
-    { 
-        link: "#",
+    {
         title: 'Aestheic & Anti-Aging',
         children: [
-            { link: "#", title: "Doctor Consultation" },
+            { title: "Doctor Consultation" },
             {
-                link: "#",
                 title: "Injection",
                 children: [
                     {
-                        link: "#",
                         title: "Dermal Filler Injections",
                         children: [
-                            { link: "#", title: "asdasdasdasdPRP Hair " },
-                            { link: "#", title: "PRP Face & Neck" }
+                            { title: "Hair" },
+                            { title: "Face & Neck" }
                         ],
                     },
-                    { link: "#", title: "Botulinum Toxin" },
-                    { link: "#", title: "Fat Burner Injection" },
+                    { title: "Botulinum Toxin" },
+                    { title: "Fat Burner Injection" },
                     { 
-                        link: "#",
+                       
                         title: "PRP",
                         children: [
-                            { link: "#", title: "PRP Hair " },
-                            { link: "#", title: "PRP Face & Neck" }
+                            { title: "PRP Hair " },
+                            { title: "PRP Face & Neck" }
                         ],
                     },
-                    { link: "#", title: "Mesotheraphy" }
+                    { title: "Mesotheraphy" }
                 ]
             },
-            { link: "#", title: "Devices" },
-            { link: "#", title: "Skin Treatment" },
-            { link: "#", title: "IV Drips" }
+            { title: "Devices" },
+            { title: "Skin Treatment" },
+            { title: "IV Drips" }
         ]
     },
-    { link: "#", title: 'Hardware Cosmetology' },
-    { link: "#", title: 'Plastic Surgery' },
-    { link: "#", title: 'Dental' },
-    { link: "#", title: 'Hair Transplant' },
-    { link: "#", title: 'Dental' }
+    { title: 'Hardware Cosmetology' },
+    { title: 'Plastic Surgery' },
+    { title: 'Dental' },
+    { title: 'Hair Transplant' },
+    { title: 'Dental' }
 ];
 
 
@@ -75,37 +72,67 @@ function renderAppointments(appointments) {
     const appointmentsElement = document.querySelector('.appointments');
     appointmentsElement.innerHTML = '';
 
-
     const appointmentsGroup = document.createElement('div');
     appointmentsGroup.classList.add('appointments__group');
 
     appointments.forEach((appointment) => {
         const appointmentRowElement = document.createElement('li');
-        appointmentRowElement.onclick = () => {
+        
+        const handleAppointmentClick = () => {
             if(appointment.children) {
+                appointments.forEach(eachAppointment => {
+                    if(eachAppointment !== appointment) {
+                        eachAppointment.active = false;
+                    };
+                });
+
                 appointment.active = !Boolean(appointment.active);
+                
+                if(!appointment.active && appointment.children) {
+                    const closeAllActiveChidren = (children) => {
+                        children.forEach(appointment => {
+                            appointment.active = false;
+                            if(appointment.children) {
+                                closeAllActiveChidren(appointment.children);
+                            };
+                        });
+                    };
+
+                    closeAllActiveChidren(appointment.children);
+                };
+                
                 renderAppointments(initialAppointments);
+
+                if(appointment.active) {
+                    appointmentsElement.scrollTo({
+                        left: 10000,
+                        behavior: "smooth"
+                    })
+                };  
             };
         };
+
+        appointmentRowElement.onclick = handleAppointmentClick;
 
         if(appointment.children) {
             appointmentRowElement.classList.add('withChildren');
         };
 
-        const appointmentLinkElement = document.createElement('a');
-        appointmentLinkElement.href = appointment.link;
-        appointmentLinkElement.innerHTML = appointment.title;
+        appointmentRowElement.innerText = appointment.title
 
-        appointmentRowElement.appendChild(appointmentLinkElement);
         appointmentsGroup.appendChild(appointmentRowElement);
         appointmentsElement.prepend(appointmentsGroup);
+
+        if(appointmentsElement.children.length > 1) {
+            appointmentsElement.classList.add('hideImage')
+        } else {
+            appointmentsElement.classList.remove('hideImage')
+        };
 
         if(appointment.active && appointment.children) {
             renderAppointments(appointment.children);
         };
     });
-
-    console.log('initialAppointments --> ', initialAppointments);
 };
 
 renderAppointments(initialAppointments);
