@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="header__navbar">
+                <ul>
+                    <li> <a href="#">Needs</a> </li>
+                    <li> <a href="#">Price List</a> </li>
+                    <li> <a href="#">Treatments</a> </li>
+                    <li> <a href="#">Surgical</a> </li>
+                    <li> <a href="#">Dental</a> </li>
+                </ul>
+            </nav>
+
+            <div class="header__burger-menu">
+                <span></span>
+            </div>
+
+            <div class="header__logo">
+                <img src="./assets/images/logo.png" alt="Logo">
+            </div>
+
+            <a class="header__phone" href="tel:+374 44 007171">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="6" y="3" width="12" height="18" rx="2" stroke="white" stroke-width="1.2"/>
+                    <path
+                        d="M9 3V3C9 3.46499 9 3.69748 9.05111 3.88823C9.18981 4.40587 9.59413 4.81019 10.1118 4.94889C10.3025 5 10.535 5 11 5H13C13.465 5 13.6975 5 13.8882 4.94889C14.4059 4.81019 14.8102 4.40587 14.9489 3.88823C15 3.69748 15 3.46499 15 3V3"
+                        stroke="white"
+                        stroke-width="1.2"
+                    />
+                    <circle cx="12" cy="18" r="1" fill="white"/>
+                </svg>
+
+                <span class="header__phone-desktop">+374 44 007171</span>
+                <span class="header__phone-mobile">Book Now</span>
+            </a>
+
+            <div class="header__search">
+                <input type="text" placeholder="Enter Search.." class="header__search-input" oninput="searchInputTypeHandler(event)">
+
+                <svg class="header__search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/>
+                    <path d="M20 20L17 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <div class="search">
+        <div class="container">
+            <h3 class="search__heading">Choose Your Appointment</h3>
+            
+            <div class="search__input">
+                <svg class="search__input-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="7" stroke="#010114" stroke-width="2"/>
+                    <path d="M20 20L17 17" stroke="#010114" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+
+                <input type="text" placeholder="Search..." oninput="searchInputTypeHandler(event)">
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <h1 class="title">Schedule an Appointment</h1>
+        </div>
+
+        <div class="container">
+            <div class="appointments">
+                <!-- Fill appointments from javascript -->
+            </div>
+        </div>
+    </main>
+
+    <script src="./index.js"></script>
+</body>
+</html>
