@@ -1,4 +1,5 @@
 let isMobile = false;
+let allAppointments = [];
 
 (function menoBurgerHandler() {
     const burgerMenu = document.querySelector('.header__burger-menu');
@@ -61,9 +62,9 @@ function searchInputTypeHandler(event) {
 
     setURLParameters({ search: searchInput.value }, () => {
         if(isMobile) {
-            renderAppointmentsMobile(initialAppointments);
+            renderAppointmentsMobile(allAppointments);
         } else {
-            renderAppointments(initialAppointments);
+            renderAppointments(allAppointments);
         };
     });
 };
@@ -95,7 +96,7 @@ function renderAppointmentsMobile(appointments) {
                     closeAllActiveChidren(appointment.children);
                 };
 
-                renderAppointmentsMobile(initialAppointments);
+                renderAppointmentsMobile(allAppointments);
             };
 
             const searchValue = getURLParameter('search');
@@ -162,7 +163,7 @@ function renderAppointments(appointments) {
                     closeAllActiveChidren(appointment.children);
                 };
                 
-                renderAppointments(initialAppointments);
+                renderAppointments(allAppointments);
 
                 if(appointment.active) {
                     appointmentsElement.scrollTo({
@@ -205,13 +206,13 @@ function renderAppointments(appointments) {
 
 async function render() {
     const appointmentsStream = await fetch('./appointments.json');
-    const appointments = await appointmentsStream.json();
+    allAppointments = await appointmentsStream.json();
 
     isMobile = window.innerWidth <= 768;
     if(isMobile) {
-        renderAppointmentsMobile(appointments);
+        renderAppointmentsMobile(allAppointments);
     } else {
-        renderAppointments(appointments);
+        renderAppointments(allAppointments);
     };
 };
 
