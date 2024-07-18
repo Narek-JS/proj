@@ -217,5 +217,4 @@ async function render() {
     };
 };
 
-window.addEventListener('resize', render);
 render();
