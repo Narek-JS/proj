@@ -1,39 +1,10 @@
 let isMobile = false;
 let allAppointments = [];
 
-(function menoBurgerHandler() {
-    const burgerMenu = document.querySelector('.header__burger-menu');
-    const navbar = document.querySelector('.header__navbar');
-
-    burgerMenu.addEventListener('click', function() {
-        this.classList.toggle("close");
-        navbar.classList.toggle("overlay");
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-})();
-
-(function searchHandler() {
-    const searchIcon = document.querySelector('.header__search-icon');
-    const searchInput = document.querySelector('.header__search-input');
-    const searchInputDesk = document.querySelector('.search__input input');
-
-    const searchParam = getURLParameter('search');
-
-    if(typeof searchParam === 'string') {
-        searchInput.value = searchParam;
-        searchInputDesk.value = searchParam;
-        searchInput.classList.add('overlay');
-    };
-
-    searchIcon.addEventListener('click', function() {
-        searchInput.classList.toggle('overlay');
-    });
-})();
-
-// Function to set multiple parameters in the URL.
+// Helper Function to set multiple parameters in the URL.
 function setURLParameters(params, callback) {
     const urlParams = new URLSearchParams(window.location.search);
-    for (const [key, value] of Object.entries(params)) {
+    for(const [key, value] of Object.entries(params)) {
         urlParams.set(key, value);
 
         if(!value) {
@@ -49,28 +20,63 @@ function setURLParameters(params, callback) {
     };
 };
 
-// Function to get a specific parameter from the URL.
+// Helper Function to get a specific parameter from the URL.
 function getURLParameter(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 };
 
-function searchInputTypeHandler(event) {
-    const searchInput = event.target;
-    if(searchInput instanceof HTMLInputElement === false) {
-        return;
-    };
+// Helper Function to get highlight search term in title (case-insensitive).
+function highlightSearchTerm(title) {
+    const searchValue = getURLParameter('search');
+    if(searchValue && searchValue.length > 1) {
+        // Create a case-insensitive regular expression for the search term.
+        const regex = new RegExp(searchValue, 'gi');
 
-    setURLParameters({ search: searchInput.value }, () => {
-        if(isMobile) {
-            renderAppointmentsMobile(allAppointments);
-        } else {
-            renderAppointments(allAppointments);
-        };
+        // Replace all occurrences of the search term with the highlighted version.
+        return title.replace(regex, match => `<span class='highlight'>${match}</span>`);
+    };
+    return title;
+};
+
+// Initialize the burger menu handler.
+function initBurgerMenuHandler() {
+    const burgerMenu = document.querySelector('.header__burger-menu');
+    const navbar = document.querySelector('.header__navbar');
+
+    burgerMenu.addEventListener('click', () => {
+        burgerMenu.classList.toggle("close");
+        navbar.classList.toggle("overlay");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 };
 
-function renderAppointmentsMobile(appointments) {
+// Initialize the search handler.
+function initSearchHandler() {
+    const searchIcon = document.querySelector('.header__search-icon');
+    const searchInput = document.querySelector('.header__search-input');
+    const searchInputDesk = document.querySelector('.search__input input');
+
+    const searchParam = getURLParameter('search');
+    if(searchParam) {
+        searchInput.value = searchParam;
+        searchInputDesk.value = searchParam;
+        searchInput.classList.add('overlay');
+    };
+
+    searchIcon.addEventListener('click', () => {
+        searchInput.classList.toggle('overlay');
+    });
+};
+
+// Handler Frunction to handle input in search field.
+function searchInputTypeHandler(event) {
+    setURLParameters({ search: event.target.value });
+    isMobile ? renderAppointmentsMobile() : renderAppointments();
+};
+
+// Renderer Funtion to render appointments for mobile.
+function renderAppointmentsMobile(appointments = allAppointments) {
     const appointmentsElement = document.querySelector('.appointments');
     appointmentsElement.innerHTML = '';
 
@@ -100,14 +106,7 @@ function renderAppointmentsMobile(appointments) {
                 renderAppointmentsMobile(allAppointments);
             };
 
-            const searchValue = getURLParameter('search');
-
-            let title = appointment.title;
-            if(typeof searchValue === 'string' && searchValue.length > 1) {
-                title = title.replaceAll(searchValue, `<span class='highlight'>${searchValue}</span>`);
-            };
-
-            appointmentRowElement.innerHTML = title
+            appointmentRowElement.innerHTML = highlightSearchTerm(appointment.title)
 
             appointmentsGroup.appendChild(appointmentRowElement);
 
@@ -131,7 +130,8 @@ function renderAppointmentsMobile(appointments) {
     appointmentsElement.appendChild(createApointments(appointments));
 };
 
-function renderAppointments(appointments) {
+// Renderer Funtion to render appointments for Desktop.
+function renderAppointments(appointments = allAppointments) {
     const appointmentsElement = document.querySelector('.appointments');
     appointmentsElement.innerHTML = '';
 
@@ -181,14 +181,7 @@ function renderAppointments(appointments) {
             appointmentRowElement.classList.add('withChildren');
         };
 
-        const searchValue = getURLParameter('search');
-
-        let title = appointment.title;
-        if(typeof searchValue === 'string' && searchValue.length > 1) {
-            title = title.replaceAll(searchValue, `<span class='highlight'>${searchValue}</span>`);
-        };
-
-        appointmentRowElement.innerHTML = title
+        appointmentRowElement.innerHTML = highlightSearchTerm(appointment.title);
 
         appointmentsGroup.appendChild(appointmentRowElement);
         appointmentsElement.prepend(appointmentsGroup);
@@ -205,16 +198,20 @@ function renderAppointments(appointments) {
     });
 };
 
+// Funtion to start put on all handlers and start render appointments.
 async function render() {
+    // Get Appointments from appointments.json local file for test.
     const appointmentsStream = await fetch('./appointments.json');
     allAppointments = await appointmentsStream.json();
 
+    // Call Initialize Functions to put on Event listenrs and Handle Events.
+    initBurgerMenuHandler();
+    initSearchHandler();
+
+    // Check the Tablet and choose what renderer function should call.
     isMobile = window.innerWidth <= 768;
-    if(isMobile) {
-        renderAppointmentsMobile(allAppointments);
-    } else {
-        renderAppointments(allAppointments);
-    };
+    isMobile ? renderAppointmentsMobile() : renderAppointments();
 };
 
-render();
+// Event to listen the HTML dom is ready and call the callback to start our project.
+window.addEventListener('DOMContentLoaded', render);
