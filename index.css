@@ -229,6 +229,7 @@ main .container:has(.appointments) {
     gap: 15px;
     overflow-x: auto;
     max-width: 900px;
+    min-width: 290px;
 }
 
 .appointments::-webkit-scrollbar {
@@ -255,6 +256,10 @@ main .container:has(.appointments) {
     font-size: 20px;
     font-weight: 600;
     color: #B3B3B9
+}
+
+.appointments__group li .highlight {
+    background: rgb(255,255,0);
 }
 
 .appointments__group:last-child li {
@@ -335,7 +340,7 @@ main .container:has(.hideImage) .main-image {
         min-width: 100%;
         min-height: 100%;
         position: fixed;
-        top: 0;
+        top: 92px;
         left: 0;
         height: 0;
         visibility: hidden;
@@ -344,14 +349,15 @@ main .container:has(.hideImage) .main-image {
         transition: all 0.3s ease-in-out;
         padding: 20px;
     }
-    
+
     .header__navbar.overlay {
         visibility: visible;
         opacity: 1;
         padding-top: 100px;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(22, 22, 23, .8);
+        backdrop-filter: blur(10px);
     }
-    
+
     .header__navbar ul {
         margin-top: 200px;
         display: flex;
@@ -360,7 +366,7 @@ main .container:has(.hideImage) .main-image {
         align-items: center;
         padding: 0;
     }
-    
+
     .header__navbar li {
         list-style: none;
     }
@@ -449,5 +455,104 @@ main .container:has(.hideImage) .main-image {
 
     .search {
         display: none;
+    }
+
+    .main-image {
+        display: none;
+    }
+
+    .appointments {
+        width: 100%;
+    }
+
+    .appointments__group {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background-color: transparent !important;
+        padding: 0 10px;
+    }
+
+    .appointments__group:last-child li.withChildren:before,
+    .appointments__group:last-child li.withChildren:after {
+        content: '';
+    }
+
+    .appointments__group li.withChildren, 
+    .appointments__group li {
+        position: relative;
+        line-height: initial;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        background-color: #F1F1F1;
+    }
+
+    .appointments__group li.withChildren:has(.appointments__group) {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .appointments__group li.withChildren:before, 
+    .appointments__group li.withChildren:after {
+        border-right: 0;
+        border-bottom: 2px solid;
+        content: '';
+        display: block;
+        height: 0;
+        width: 8px;
+        margin-left: -6px;
+        position: absolute;
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        left: 95%;
+        bottom: 27px;
+        top: auto;
+    }
+
+    .appointments__group li.withChildren.active:before {
+        transform: rotate(-45deg);
+    }
+
+    .appointments__group li.withChildren:after {
+        margin-left: -1px;
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+
+    .appointments__group li.withChildren.active:after {
+        transform: rotate(45deg);
+    }
+
+    .appointments > .appointments__group:first-of-type > li.withChildren.active {
+        background-color: var(--text-dark-color);
+        border-right: 1px solid var(--text-dark-color);
+        border-left: 1px solid var(--text-dark-color);
+        color: var(--text-wite-color);
+        margin-bottom: -20px;
+    }
+
+    .appointments__group .appointments__group {
+        border: 1px solid var(--text-dark-color);
+        gap: 0;
+    }
+
+    .appointments__group .appointments__group .appointments__group {
+        border: none;
+        background-color: #F1F1F1 !important;
+    }
+
+    .appointments__group .appointments__group li {
+        background-color: transparent;
     }
 }
