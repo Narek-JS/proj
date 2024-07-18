@@ -11,10 +11,14 @@
                         "title": "Dermal Filler Injections",
                         "children": [
                             { "title": "Hair" },
-                            { "title": "Face & Neck", "children": [
-                                { "title": "Skin Treatment" },
-                                { "title": "IV Drips" }
-                            ] }
+                            { 
+                                "title": "Face & Neck",
+                                "children": [
+                                    { "title": "Skin Treatment" },
+                                    { "title": "IV Drips" }
+                                ]
+                            },
+                            { "title": "Doctor Consultation" }
                         ]
                     },
                     { "title": "Botulinum Toxin" },

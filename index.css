@@ -301,11 +301,6 @@ main .container:has(.appointments) {
     transform: rotate(45deg);
 }
 
-.appointments__group:last-child li.withChildren:before,
-.appointments__group:last-child li.withChildren:after {
-    content: none;
-}
-
 /* Main image styles */
 .main-image {
     position: relative;
