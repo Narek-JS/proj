@@ -68,49 +68,6 @@ function searchInputTypeHandler(event) {
     });
 };
 
-const initialAppointments = [
-    { title: 'Hardware Cosmetology' },
-    {
-        title: 'Aestheic & Anti-Aging',
-        children: [
-            { title: "Doctor Consultation" },
-            {
-                title: "Injection",
-                children: [
-                    {
-                        title: "Dermal Filler Injections",
-                        children: [
-                            { title: "Hair" },
-                            { title: "Face & Neck", children: [
-                                { title: "Skin Treatment" },
-                                { title: "IV Drips" }
-                            ] }
-                        ],
-                    },
-                    { title: "Botulinum Toxin" },
-                    { title: "Fat Burner Injection" },
-                    { 
-                       
-                        title: "PRP",
-                        children: [
-                            { title: "PRP Hair " },
-                            { title: "PRP Face & Neck" }
-                        ],
-                    },
-                    { title: "Mesotheraphy" }
-                ]
-            },
-            { title: "Devices" },
-            { title: "Skin Treatment" },
-            { title: "IV Drips" }
-        ]
-    },
-    { title: 'Plastic Surgery' },
-    { title: 'Dental' },
-    { title: 'Hair Transplant' },
-    { title: 'Dental' }
-];
-
 function renderAppointmentsMobile(appointments) {
     const appointmentsElement = document.querySelector('.appointments');
     appointmentsElement.innerHTML = '';
@@ -246,12 +203,15 @@ function renderAppointments(appointments) {
     });
 };
 
-function render() {
+async function render() {
+    const appointmentsStream = await fetch('./appointments.json');
+    const appointments = await appointmentsStream.json();
+
     isMobile = window.innerWidth <= 768;
     if(isMobile) {
-        renderAppointmentsMobile(initialAppointments);
+        renderAppointmentsMobile(appointments);
     } else {
-        renderAppointments(initialAppointments);
+        renderAppointments(appointments);
     };
 };
 
