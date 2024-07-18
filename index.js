@@ -8,6 +8,7 @@ let allAppointments = [];
     burgerMenu.addEventListener('click', function() {
         this.classList.toggle("close");
         navbar.classList.toggle("overlay");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 })();
 
